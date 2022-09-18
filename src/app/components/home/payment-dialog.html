@@ -1,0 +1,58 @@
+<form #paymentForm="ngForm">
+<h1 mat-dialog-title>Ödeme Ekranı</h1>
+<div mat-dialog-content>
+  <div class="form-group">
+    <mat-form-field class="example-form" appearance="outline">
+      <mat-label>Kart Sahibi</mat-label>
+      <input
+      matInput
+      required
+      name="cartOwner"
+      ngModel/>
+    </mat-form-field>
+    <mat-form-field class="example-form" appearance="outline">
+      <mat-label>Kart Numarası</mat-label>
+      <input
+      matInput
+      required
+      ngModel
+      name="cartNumber" />
+    </mat-form-field>
+    <mat-form-field class="example-form" appearance="outline">
+      <mat-label>Son Kullanma Tarihi</mat-label>
+      <input
+       matInput
+       required
+       ngModel
+       name="expirationDate" />
+    </mat-form-field>
+    <mat-form-field class="example-form" appearance="outline">
+      <mat-label>CVV</mat-label>
+      <input
+      matInput
+      ngModel
+      name="cvv"
+      required
+      minLength="3"
+      maxlength="3" />
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <div class="row">
+    <div class="col-md-4">
+      <button type="submit" color="primary" mat-button [mat-dialog-close]="paymentForm" cdkFocusInitial>
+        <mat-icon>credit_card</mat-icon>
+        Ödeme Yap
+      </button>
+    </div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <button type="button" color="warn" mat-button class="mx-6" (click)="onNoClick()">
+        <mat-icon>cancel_presentation</mat-icon>
+        Vazgeç
+      </button>
+    </div>
+  </div>
+</div>
+</form>

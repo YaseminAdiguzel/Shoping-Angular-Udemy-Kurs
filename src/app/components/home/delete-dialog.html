@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Sil?</h1>
+<div mat-dialog-content>
+  <p>Ürün Adı: <strong>{{ data.product.name }} </strong>- Adet: <strong>{{ data.quantity }}</strong></p>
+  <p>Sepetteki ürünü silmek istiyor musunuz?</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>
+    <mat-icon color="warn">delete</mat-icon>
+    Sil
+  </button>
+  <button mat-button class="mx-6" (click)="onNoClick()">
+    <mat-icon> cancel_presentation</mat-icon>
+    Vazgeç
+  </button>
+
+</div>

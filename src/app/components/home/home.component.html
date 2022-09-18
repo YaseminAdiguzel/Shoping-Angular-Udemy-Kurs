@@ -1,0 +1,177 @@
+<div class="row mt-4 mx-4">
+  <div class="col-md-8">
+    <div class="form-group">
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Aranacak ürünü yazın</mat-label>
+        <input
+          matInput
+          type="text"
+          [(ngModel)]="productName"
+          autocomplete="off"
+        />
+        <button
+          *ngIf="productName"
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="productName = ''"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <div class="form-group text-center">
+      <div class="row">
+        <div
+          class="col-md-3"
+          *ngFor="let product of products | filterProduct: productName"
+        >
+          <div class="form-group">
+            <img [src]="product.imageUrl" />
+          </div>
+          <div class="form-group">
+            <h1 style="font-size: 20px" class="control-label">
+              <strong [innerText]="product.name"></strong>
+            </h1>
+          </div>
+          <div class="form-group">
+            <h1
+              style="font-size: 20px"
+              class="control-label text-danger"
+              [innerText]="
+                product.price | currency: 'TRY':'symbol-narrow':'1.2-2'
+              "
+            ></h1>
+          </div>
+          <div class="form-group">
+            <mat-form-field appearance="standard">
+              <mat-label>Kalan Adet</mat-label>
+              <input
+                disabled="disabled"
+                class="text-center"
+                style="font-size: x-large"
+                [value]="product.inventoryQuantity"
+                matInput
+                placeholder="Placeholder"
+              />
+            </mat-form-field>
+          </div>
+          <div *ngIf="product.inventoryQuantity > 0 && !isAuth">
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Adet</mat-label>
+                <input
+                  type="number"
+                  required
+                  min="1"
+                  [max]="product.inventoryQuantity"
+                  autocomplete="off"
+                  class="text-center"
+                  style="font-size: x-large"
+                  value="1"
+                  matInput
+                  #addQuantity
+                  placeholder="Placeholder"
+                />
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <button
+                (click)="addBasket(product, addQuantity)"
+                mat-raised-button
+                color="primary"
+              >
+              <mat-icon>shopping_cart</mat-icon>
+                Sepete Ekle
+              </button>
+            </div>
+          </div>
+          <div class="form-group" *ngIf="isAuth">
+            <button routerLink="/product/{{ product.codeGuid }}" mat-raised-button color="accent">
+              <mat-icon>check</mat-icon>
+              Ürünü Güncelle
+            </button>
+          </div>
+          <br />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4" *ngIf="!isAuth">
+    <h1 class="text-center text-success"><strong>Sepetiniz</strong></h1>
+    <hr />
+    <div class="form-group">
+      <table mat-table [dataSource]="baskets" class="mat-elevation-z8">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let element = index">{{ element + 1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Ürün Adı</th>
+          <td mat-cell *matCellDef="let element">{{ element.product.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef>Adet</th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              (click)="updateBaskets(element, -1)"
+              mat-icon-button
+              color="accent"
+            >
+              <mat-icon>remove_from_queue</mat-icon>
+            </button>
+            {{ element.quantity }}
+            <button
+              (click)="updateBaskets(element, 1)"
+              mat-icon-button
+              color="primary"
+            >
+              <mat-icon>add_to_queue</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef>Tutar</th>
+          <td mat-cell *matCellDef="let element">
+            {{
+              element.product.price * element.quantity
+                | currency: "TRY":"symbol-narrow":"1.2-2"
+            }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="transaction">
+          <th mat-header-cell *matHeaderCellDef>İşlemler</th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              mat-icon-button
+              (click)="openDeleteDialog(element)"
+              color="accent"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+    <hr />
+    <mat-card>
+      <h1 class="text-center text-danger">
+        Toplam: {{ total | currency: "TRY":"symbol-narrow":"1.2-2" }}
+      </h1>
+    </mat-card>
+    <hr />
+    <div class="form-group text-center" *ngIf="baskets.length > 0">
+      <button (click)="openPaymentDialog()" mat-raised-button color="primary">
+        <mat-icon>credit_card</mat-icon>
+        Ödeme Yap
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+
+<div class="row mt-5 d-flex justify-content-center">
+  <div class="col-md-3">
+    <div class="form-group text-center">
+      <h1>Giriş Sayfası</h1>
+    </div>
+<form #loginForm="ngForm">
+    <div class="form-group">
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Mail adresi</mat-label>
+        <input
+        matInput
+        required
+        email
+        name="email"
+        ngModel>
+        <mat-icon matSuffix>alternate_email</mat-icon>
+      </mat-form-field>
+      </div>
+
+      <div class="form-group">
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Şifre</mat-label>
+        <input
+        matInput
+        [type]="hide ? 'password' : 'text'"
+        name="password"
+        required
+        ngModel>
+
+        <button
+        mat-icon-button
+        matSuffix
+        (click)="hide = !hide"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide"
+        required
+        >
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+      </div>
+
+      <div class="form-group text-center">
+        <button (click)="login(loginForm.value)" type="submit" class="form-control" mat-raised-button color="primary">
+          <mat-icon>lock_open</mat-icon>
+          Giriş Yap
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
